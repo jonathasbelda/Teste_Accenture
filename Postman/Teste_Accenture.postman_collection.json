@@ -1,0 +1,282 @@
+{
+	"info": {
+		"_postman_id": "8c08727b-51b1-42fb-8bb6-dcb84a692657",
+		"name": "Teste_Accenture",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19837519"
+	},
+	"item": [
+		{
+			"name": "Novo usuário",
+			"item": [
+				{
+					"name": "Novo Usuário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Book Store Web API"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userName\": \"Lucas\",\n  \"password\": \"Lucas@123456@\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demoqa.com/Account/v1/User",
+							"protocol": "https",
+							"host": [
+								"demoqa",
+								"com"
+							],
+							"path": [
+								"Account",
+								"v1",
+								"User"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Token Acesso",
+			"item": [
+				{
+					"name": "Token Acesso",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Book Store Web API"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userName\": \"Lucas\",\n  \"password\": \"Lucas@123456@\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demoqa.com/Account/v1/GenerateToken",
+							"protocol": "https",
+							"host": [
+								"demoqa",
+								"com"
+							],
+							"path": [
+								"Account",
+								"v1",
+								"GenerateToken"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Autenticação",
+			"item": [
+				{
+					"name": "Autenticação",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Book Store Web API"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userName\": \"Lucas\",\n  \"password\": \"Lucas@123456@\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demoqa.com/Account/v1/Authorized",
+							"protocol": "https",
+							"host": [
+								"demoqa",
+								"com"
+							],
+							"path": [
+								"Account",
+								"v1",
+								"Authorized"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Listar Livros",
+			"item": [
+				{
+					"name": "Listar Livros",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Book Store Web API"
+							}
+						],
+						"url": {
+							"raw": "https://demoqa.com/BookStore/v1/Books",
+							"protocol": "https",
+							"host": [
+								"demoqa",
+								"com"
+							],
+							"path": [
+								"BookStore",
+								"v1",
+								"Books"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Alugar Livros",
+			"item": [
+				{
+					"name": "Alugar Livros",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "application/json"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n  \"userId\": \"e3ee2451-eb0e-46cb-a4aa-f1a334776ce0\",\n  \"collectionOfIsbns\": [\n    {\n      \"isbn\": \"9781491950296\"\n    }\n  ]\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://demoqa.com/BookStore/v1/Books",
+							"protocol": "https",
+							"host": [
+								"demoqa",
+								"com"
+							],
+							"path": [
+								"BookStore",
+								"v1",
+								"Books"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Listar Detalhes Usuários/Livros",
+			"item": []
+		},
+		{
+			"name": "Listar Detalhes Usuários/Livros",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "accept",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://demoqa.com/Account/v1/User/{UUID}?userId=e3ee2451-eb0e-46cb-a4aa-f1a334776ce0",
+					"protocol": "https",
+					"host": [
+						"demoqa",
+						"com"
+					],
+					"path": [
+						"Account",
+						"v1",
+						"User",
+						"{UUID}"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "e3ee2451-eb0e-46cb-a4aa-f1a334776ce0"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
