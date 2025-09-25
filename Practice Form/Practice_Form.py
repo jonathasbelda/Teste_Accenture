@@ -1,110 +1,221 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.support import expected_conditions as EC
 import time
 
-#Configurações do Chrome
-def instanciar_chrome():
-    driver = webdriver.Chrome()  #Instancializar o Chrome
-    driver.implicitly_wait(10)
-    driver.maximize_window()  #maximizar a janela do chrome
-    driver.get("https://demoqa.com")  # Abrir a página demoqa
-    time.sleep(2)
-    return driver
+# =====================
+# Browser
+# 1. Launch browser and navigate to URL
+# 2. Navigate to url 'https://demoqa.com'
+# 3. Verify that home page is visible successfully
+# =====================
 
-#clicar em forms
-def forms(driver):
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(2)
-    driver.find_element(By.XPATH, "//*[@id='app']/div/div/div[2]/div/div[2]/div/div[3]/h5").click()
-    time.sleep(2)
+class Browser:
+    def __init__(self):
+        #1. Launch browser and navigate to URL
+        self.driver = webdriver.Chrome()
+        self.driver.implicitly_wait(10)
+        self.driver.maximize_window()
+        # 2. Navigate to url 'https://demoqa.com'
+        self.driver.get("https://demoqa.com")
+        self.wait = WebDriverWait(self.driver, 20)
+        # 3. Verify that home page is visible successfully
+        self.home_page_logo = (By.XPATH, "//*[@id='app']/header/a/img")
+        assert self.wait.until(EC.visibility_of_element_located(self.home_page_logo)).is_displayed()
+    print("✅Home page is visible successfully")
 
-#clicar em practice form
-def practice_form(driver):
-    driver.find_element(By.XPATH, "/html/body/div[2]/div/div/div/div[1]/div/div/div[2]/div/ul/li").click()
-    time.sleep(2)
+    def quit(self):
+        self.driver.quit()
+ 
 
-    #preencher o formulário
-    driver.find_element(By.ID, "firstName").send_keys("João")
-    driver.find_element(By.ID, "lastName").send_keys("Silva")  
-    driver.find_element(By.ID, "userEmail").send_keys("teste@hotmail.com")
+# =====================
+# FormsPage
+# 4. Click on 'Forms' button
+# 5. Verify 'Forms' is visible
+# 6. Click on 'Practice Form' button
+# 7. Verify 'Practice Form' is visible
+# 8. Fill in the form fields
+# 9. Submit the form
+# 10. Verify form submission
+# =====================
 
-    #Selecionar o gênero
-    driver.find_element(By.XPATH, "//*[@id='genterWrapper']/div[2]/div[1]/label").click() 
-    #Inserir o telefone
-    driver.find_element(By.ID, "userNumber").send_keys("11999999999") 
+class FormsPage:
+    def __init__(self, driver):
+        self.driver = driver
+        self.wait = WebDriverWait(driver, 20)
+        
+        # Locators
+        # 4. Click on 'Forms' button
+        self.forms_card = (By.XPATH, "//*[@id='app']/div/div/div[2]/div/div[2]/div/div[3]")
+        # Locator do menu lateral "Forms". Útil para clicar no menu depois de abrir o card.
+        self.forms_menu = (By.XPATH, "//span[text()='Forms']")
+        # Locator do container ou seção "Forms". Pode ser usado para validar se a seção carregou.
+        self.forms = (By.ID, "Forms")
+        # 5. Verify 'Forms' is visible
+        self.forms_text = (By.XPATH, "//div[@class='header-text' and text()='Forms']")
+        
+        #Methods
+    def open_forms(self):
+        # 4. Click on 'Forms' button
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        self.wait.until(EC.element_to_be_clickable(self.forms_card)).click()
+        time.sleep(2)
+        # 5. Verify 'Forms' is visible
+        assert self.wait.until(EC.visibility_of_element_located(self.forms_text)).is_displayed()
+        print("✅'Forms' is visible")
+        
+  
+# =====================       
+# PracticeForm    
+# 7. Click on 'Practice Form' button
+# 8. Verify 'Practice Form' is visible
+# 9. Fill in the form fields
+# 10. Submit the form
+# 11. Verify form submission
+# =====================    
+
+class PracticeForm:
+    def __init__(self, driver):
+        self.driver = driver
+        self.wait = WebDriverWait(driver, 20)
+        
+        # Locators
+        # 7. Click on 'Practice Form' button
+        self.practice_form_item = (By.XPATH, "//span[text()='Practice Form']")
+        # 8. Verify 'Practice Form' is visible
+        self.practice_form_text = (By.XPATH, "//span[@class='text' and text()='Practice Form']")
+        # 9. Fill in the form fields
+        self.first_name = (By.ID, "firstName")
+        self.last_name = (By.ID, "lastName")
+        self.email = (By.ID, "userEmail")
+        self.gender_male = (By.XPATH, "//*[@id='genterWrapper']/div[2]/div[1]/label")
+        self.phone = (By.ID, "userNumber")
+        self.dob_input = (By.ID, "dateOfBirthInput")
+        self.month_select = (By.CLASS_NAME, "react-datepicker__month-select")
+        self.year_select = (By.CLASS_NAME, "react-datepicker__year-select")
+        self.day_25 = (By.XPATH, "//*[@aria-label='Choose Friday, May 25th, 1990']")
+        self.subjects_input = (By.ID, "subjectsInput")
+        self.hobby_sports_label = (By.XPATH, "//label[text()='Sports']")
+        self.upload_picture = (By.ID, "uploadPicture")
+        self.address = (By.ID, "currentAddress")
+        self.state_input = (By.ID, "react-select-3-input")
+        self.city_input = (By.ID, "react-select-4-input")
+        self.submit_button = (By.ID, "submit")
+        self.close_modal = (By.ID, "closeLargeModal")
     
-    #Clicar no campo data de nascimento
-    driver.find_element(By.ID, "dateOfBirthInput").click()
-    time.sleep(1)
-    #Clicar no campo mês
-    driver.find_element(By.CLASS_NAME, "react-datepicker__month-select").click() 
-    #Selecionar o mês
-    select = Select(driver.find_element(By.CLASS_NAME, "react-datepicker__month-select"))
-    #Selecionar o mês maio
-    select.select_by_visible_text("May")
-    time.sleep(1)
-    #Clicar no campo ano
-    driver.find_element(By.CLASS_NAME, "react-datepicker__year-select").click() 
-    #Selecionar o ano 
-    select = Select(driver.find_element(By.CLASS_NAME, "react-datepicker__year-select"))
-    #Selecionar o ano 1990
-    select.select_by_visible_text("1990")
-    time.sleep(1)
+        # Methods
+    def registration_Form(self):
+        # 7. Click on 'Practice Form' button
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        self.wait.until(EC.element_to_be_clickable(self.practice_form_item)).click()
+        time.sleep(2)
+        # 8. Verify 'Practice Form' is visible
+        assert self.wait.until(EC.visibility_of_element_located(self.practice_form_text)).is_displayed()
+        print("✅'Practice Form' is visible")
+        
+    # 9. Fill in the form fields
+    def preencher_nome(self, first, last):
+        # Preenche o primeiro e último nome
+        self.wait.until(EC.visibility_of_element_located(self.first_name)).send_keys(first)
+        self.driver.find_element(*self.last_name).send_keys(last)
 
-    #Selecionar o dia 25
-    driver.find_element(By.XPATH, "//*[@aria-label='Choose Friday, May 25th, 1990']").click()
-    #Scroll até o final da página
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(2) 
+    def preencher_email(self, email):
+        # Preenche o email
+        self.driver.find_element(*self.email).send_keys(email)
 
-    #Scroll até o final da página
-    driver.find_element(By.ID, "subjectsInput").send_keys("Maths")
-    #Enter
-    driver.find_element(By.ID, "subjectsInput").send_keys("\n")
-    time.sleep(1)
+    def selecionar_genero(self):
+        # Seleciona o gênero "Male"
+        self.driver.find_element(*self.gender_male).click()
 
-    #Selecionar o hobby
-    driver.find_element(By.XPATH, "//*[@id='hobbiesWrapper']/div[2]/div[1]/label").click() 
-    time.sleep(1)
+    def preencher_telefone(self, phone):
+        # Preenche o número de telefone
+        self.driver.find_element(*self.phone).send_keys(phone)
 
-    #Fazer upload da arquivo 
-    driver.find_element(By.ID, "uploadPicture").send_keys("C:/Users/User/OneDrive/Documentos/Accenture/Practice Form/files/Teste_Accenture.txt")      
-    time.sleep(3)
+    def selecionar_data_nascimento(self, mes="May", ano="1990", dia_aria_label=None):
+        # Abre o calendário
+        self.driver.find_element(*self.dob_input).click()
+        # Seleciona mês e ano
+        Select(self.driver.find_element(*self.month_select)).select_by_visible_text(mes)
+        Select(self.driver.find_element(*self.year_select)).select_by_visible_text(ano)
+        # Seleciona o dia (padrão = 25 de maio de 1990)
+        if not dia_aria_label:
+            dia_aria_label = "//*[@aria-label='Choose Friday, May 25th, 1990']"
+        self.driver.find_element(By.XPATH, dia_aria_label).click()
 
-    #Preencher o campo endereço
-    driver.find_element(By.ID, "currentAddress").send_keys("Rua teste, 123, São Paulo, SP")
-    time.sleep(1)
+    def adicionar_materia(self, materia):
+        # Digita a matéria e confirma com Enter
+        campo = self.driver.find_element(*self.subjects_input)
+        campo.send_keys(materia)
+        campo.send_keys("\n")
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-    #Selecionar o estado
-    estado_input = driver.find_element(By.ID, "react-select-3-input")
-    estado_input.send_keys("NCR")
-    time.sleep(1) 
-    estado_input.send_keys("\n")
-    time.sleep(2)
+    def selecionar_hobby(self):
+        # Seleciona o hobby "Sports"
+        element = self.wait.until(EC.element_to_be_clickable(self.hobby_sports_label))
+        element.click()
 
-    #Selecionar a cidade   
-    cidade_input = driver.find_element(By.ID, "react-select-4-input")
-    cidade_input.send_keys("Delhi")
-    time.sleep(1) 
-    cidade_input.send_keys("\n")
-    time.sleep(2)
+    def fazer_upload(self, caminho_arquivo):
+        # Faz upload de um arquivo local
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        self.driver.find_element(*self.upload_picture).send_keys(caminho_arquivo)
+        time.sleep(5)
 
-    #submit
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(1) 
-    driver.find_element(By.XPATH, "//*[@id='submit']").click()
-    time.sleep(10) 
+    def preencher_endereco(self, endereco):
+        # Preenche o endereço
+        self.driver.find_element(*self.address).send_keys(endereco)
 
-    #Fechar o modal
-    driver.find_element(By.ID, "closeLargeModal").click()
-    time.sleep(4)
-   
+    def selecionar_estado_cidade(self, estado, cidade):
+        # Seleciona estado
+        estado_input = self.driver.find_element(*self.state_input)
+        estado_input.send_keys(estado)
+        estado_input.send_keys("\n")
+        # Seleciona cidade
+        cidade_input = self.driver.find_element(*self.city_input)
+        cidade_input.send_keys(cidade)
+        cidade_input.send_keys("\n")
 
-# Chamada da função
-driver = instanciar_chrome()
-forms(driver)
-practice_form(driver)
+    # 10. Submit the form
+    def submeter_formulario(self):
+        # Rola até o final da página e clica em "Submit"
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        self.driver.find_element(*self.submit_button).click()
+        time.sleep(5) # espera fixa para visualização
 
-driver.quit()
+    # 11. Verify form submission
+    def fechar_modal(self):
+        # Fecha o modal de confirmação após o submit
+        self.wait.until(EC.element_to_be_clickable(self.close_modal)).click()
+    
+
+# =====================
+# Execução do teste
+# =====================
+if __name__ == "__main__":
+    # Inicializa o navegador
+    browser = Browser()
+    driver = browser.driver
+
+    # FormsPage
+    forms_page = FormsPage(driver)
+    forms_page.open_forms()
+    
+    
+    # PracticeForm
+    PracticeFormPage = PracticeForm(driver)
+    PracticeFormPage.registration_Form()
+    PracticeFormPage.preencher_nome("João", "Silva")
+    PracticeFormPage.preencher_email("teste@hotmail.com")
+    PracticeFormPage.selecionar_genero()
+    PracticeFormPage.preencher_telefone("11999999999")
+    PracticeFormPage.selecionar_data_nascimento()
+    PracticeFormPage.adicionar_materia("Maths")
+    PracticeFormPage.selecionar_hobby()
+    PracticeFormPage.fazer_upload("C:/Users/User/OneDrive/Documentos/Accenture/Practice Form/files/Teste_Accenture.txt")
+    PracticeFormPage.preencher_endereco("Rua teste, 123, São Paulo, SP")
+    PracticeFormPage.selecionar_estado_cidade("NCR", "Delhi")
+    PracticeFormPage.submeter_formulario()
+    PracticeFormPage.fechar_modal()
+    
+    # Fecha o navegador
+    browser.quit()
